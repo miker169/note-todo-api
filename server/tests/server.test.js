@@ -1,6 +1,7 @@
 const expect = require('expect');
 const request = require('supertest');
 const { ObjectID } = require('mongodb');
+const _ = require('lodash');
 
 const { app } = require('../server');
 const { Todo } = require('../models/todo');
@@ -239,6 +240,24 @@ describe('POST /users', () => {
       password
     })
     .expect(400)
+    .end(done);
+  });
+});
+
+
+describe('POST /users/login', () => {
+  it('should retrieve the user', (done) => {
+
+    request(app)
+    .post('/users/login')
+    .send({
+      email: users[0].email,
+      password: users[0].password
+    })
+    .expect(200)
+    .expect((res) => {
+      expect(users[0].email).toBe(res.body.email)
+    })
     .end(done);
   });
 });
